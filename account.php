@@ -26,68 +26,264 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade bg-white p-3 border-right border-left border-bottom show active" id="booking" role="tabpanel" aria-labelledby="booking-tab">
-            <div class="row">
-                <?php
-                    foreach ($bookings as &$row)
-                    {
-                        $route_from = $new_location->getById($row['route_from']);
-                        $route_to = $new_location->getById($row['route_to']);
+        
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="true">Pending</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="confirmed-tab" data-toggle="tab" href="#confirmed" role="tab" aria-controls="confirmed" aria-selected="false">Confirmed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="cancelled-tab" data-toggle="tab" href="#cancelled" role="tab" aria-controls="cancelled" aria-selected="false">Cancel</a>
+            </li>
+        </ul>
 
-                        ?>
-                            <div class="col-md-4">
-                                <div class="border bg-light">
-                                    <div class="bg-primary p-3">
-                                        <small><?php echo 'Distance: '.$row['distance'] ?></small>
-                                        <h4 class="mb-0">
-                                            <?php echo $route_from["location_name"].' &#x2192; '.$route_to["location_name"] ?>
-                                        </h4>
-                                    </div>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active p-3" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                <div class="row">
+                    <?php
+                        foreach ($bookings as &$row)
+                        {
+                            if($row['payment_status'] == 'pending')
+                            {
+                                $route_from = $new_location->getById($row['route_from']);
+                                $route_to = $new_location->getById($row['route_to']);
 
-                                    <div class="p-3">
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Date:</span>
-                                            <span class="font-weight-bold"><?php echo date_format(date_create($row['book_date']),'F j, Y') ?></span>
-                                        </p>
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Reference:</span>
-                                            <span class="font-weight-bold"><?php echo $row['book_reference'] ?></span>
-                                        </p>
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Seat #:</span>
-                                            <span class="font-weight-bold"><?php echo $row['seat_num'] ?></span>
-                                        </p>
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Status:</span>
-                                            <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
-                                        </p>
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Schedule Date:</span>
-                                            <span class="font-weight-bold"><?php echo date_format(date_create($row['schedule_date']),'F j, Y') ?></span>
-                                        </p>
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Departure Time:</span>
-                                            <span class="font-weight-bold"><?php echo date_format(date_create($row["departure"]), 'g:i A') ?></span>
-                                        </p>
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Arrival Time:</span>
-                                            <span class="font-weight-bold"><?php echo date_format(date_create($row["arrival"]), 'g:i A') ?></span>
-                                        </p>
-                                        <p class="mb-0 d-flex align-items-center justify-content-between">
-                                            <span class="text-muted">Fare:</span>
-                                            <span class="font-weight-bold"><?php echo $row['fare'] ?></span>
-                                        </p>
+                                ?>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="border bg-light">
+                                            <div id="<?php echo 'print_'.$row['book_id'] ?>">
+                                                <div class="bg-primary p-3">
+                                                    <small><?php echo 'Distance: '.$row['distance'] ?></small>
+                                                    <h4 class="mb-0">
+                                                        <?php echo $route_from["location_name"].' &#x2192; '.$route_to["location_name"] ?>
+                                                    </h4>
+                                                </div>
+
+                                                <div class="p-3">
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Date:</span>
+                                                        <span class="font-weight-bold"><?php echo date_format(date_create($row['book_date']),'F j, Y') ?></span>
+                                                    </p>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Reference:</span>
+                                                        <span class="font-weight-bold"><?php echo $row['book_reference'] ?></span>
+                                                    </p>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Seat #:</span>
+                                                        <span class="font-weight-bold"><?php echo $row['seat_num'] ?></span>
+                                                    </p>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Status:</span>
+                                                        <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                    </p>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Schedule Date:</span>
+                                                        <span class="font-weight-bold"><?php echo date_format(date_create($row['schedule_date']),'F j, Y') ?></span>
+                                                    </p>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Departure Time:</span>
+                                                        <span class="font-weight-bold"><?php echo date_format(date_create($row["departure"]), 'g:i A') ?></span>
+                                                    </p>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Arrival Time:</span>
+                                                        <span class="font-weight-bold"><?php echo date_format(date_create($row["arrival"]), 'g:i A') ?></span>
+                                                    </p>
+                                                    <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                        <span class="text-muted">Fare:</span>
+                                                        <span class="font-weight-bold"><?php echo $row['fare'] ?></span>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-3">
+                                                <button class="btn btn-sm btn-danger" onclick="cancelBook('<?php echo $row['book_id'] ?>')">Cancel</button>
+                                                <button class="btn btn-sm btn-outline-primary" onclick="PrintElem('<?php echo 'print_'.$row['book_id'] ?>')">Print</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                <?php
+                            }
+                        }
+                    ?>
+                </div>
+            </div>
+            <div class="tab-pane fade p-3" id="confirmed" role="tabpanel" aria-labelledby="confirmed-tab">
+                <div class="row">
                         <?php
-                    }
-                ?>
+                            foreach ($bookings as &$row)
+                            {
+                                if($row['payment_status'] == 'confirm')
+                                {
+                                    $route_from = $new_location->getById($row['route_from']);
+                                    $route_to = $new_location->getById($row['route_to']);
+
+                                    ?>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="border bg-light">
+                                                <div id="<?php echo 'print_'.$row['book_id'] ?>">
+                                                    <div class="bg-primary p-3">
+                                                        <small><?php echo 'Distance: '.$row['distance'] ?></small>
+                                                        <h4 class="mb-0">
+                                                            <?php echo $route_from["location_name"].' &#x2192; '.$route_to["location_name"] ?>
+                                                        </h4>
+                                                    </div>
+
+                                                    <div class="p-3">
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Date:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row['book_date']),'F j, Y') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Reference:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['book_reference'] ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Seat #:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['seat_num'] ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Status:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Schedule Date:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row['schedule_date']),'F j, Y') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Departure Time:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row["departure"]), 'g:i A') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Arrival Time:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row["arrival"]), 'g:i A') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Fare:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['fare'] ?></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="p-3">
+                                                    <button class="btn btn-sm btn-outline-primary" onclick="PrintElem('<?php echo 'print_'.$row['book_id'] ?>')">Print</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php
+                                }
+                            }
+                        ?>
+                    </div>
+                </div>
+            <div class="tab-pane fade p-3" id="cancelled" role="tabpanel" aria-labelledby="cancelled-tab">
+                <div class="row">
+                        <?php
+                            foreach ($bookings as &$row)
+                            {
+                                if($row['payment_status'] == 'cancel')
+                                {
+                                    $route_from = $new_location->getById($row['route_from']);
+                                    $route_to = $new_location->getById($row['route_to']);
+
+                                    ?>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="border bg-light">
+                                                <div id="<?php echo 'print_'.$row['book_id'] ?>">
+                                                    <div class="bg-primary p-3">
+                                                        <small><?php echo 'Distance: '.$row['distance'] ?></small>
+                                                        <h4 class="mb-0">
+                                                            <?php echo $route_from["location_name"].' &#x2192; '.$route_to["location_name"] ?>
+                                                        </h4>
+                                                    </div>
+
+                                                    <div class="p-3">
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Date:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row['book_date']),'F j, Y') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Reference:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['book_reference'] ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Seat #:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['seat_num'] ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Status:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Schedule Date:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row['schedule_date']),'F j, Y') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Departure Time:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row["departure"]), 'g:i A') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Arrival Time:</span>
+                                                            <span class="font-weight-bold"><?php echo date_format(date_create($row["arrival"]), 'g:i A') ?></span>
+                                                        </p>
+                                                        <p class="mb-0 d-flex align-items-center justify-content-between">
+                                                            <span class="text-muted">Fare:</span>
+                                                            <span class="font-weight-bold"><?php echo $row['fare'] ?></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php
+                                }
+                            }
+                        ?>
+                    </div>
+                </div>
             </div>
         </div>
+        
         <div class="tab-pane fade bg-white p-3 border-right border-left border-bottom" id="settings" role="tabpanel" aria-labelledby="settings-tab">setings</div>
     </div>
     </div>
 </main>
+
+<script>
+    function PrintElem(divId)
+    {
+        var printContents = document.getElementById(divId).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = "<html><head><title></title></head><body>" + printContents + "</body>";
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+
+    function cancelBook(id)
+    {
+        if(confirm("Are you sure to cancel this booking?")){
+            console.log('cancelBook', id)
+            $.ajax({
+                cache: false,
+                data: {
+                    type: 2,
+                    id
+                },
+                type: "post",
+                url: "controllers/cancel-booking.php",
+                success: function(dataResult) {
+                    var dataResult = JSON.parse(dataResult);
+                    if (dataResult.statusCode == 200) {
+                        alert("Booking cancelled successfully.");
+                        location.reload();
+                    } else {
+                        alert(dataResult.title);
+                    }
+                },
+            });
+        }
+    }
+</script>
 
 <?php include('includes/scripts.php')?>
 <?php include('includes/layout-footer.php')?>

@@ -37,7 +37,7 @@
 
         public function getPassengersBooking($passenger_id)
         {
-            $query = "SELECT * FROM ".$this->table_name." b INNER JOIN tblschedule s ON b.schedule_id = s.id INNER JOIN tblroute r ON s.route_id = r.id WHERE passenger_id = '$passenger_id' ORDER BY book_date DESC";
+            $query = "SELECT *, b.id as book_id FROM ".$this->table_name." b INNER JOIN tblschedule s ON b.schedule_id = s.id INNER JOIN tblroute r ON s.route_id = r.id WHERE passenger_id = '$passenger_id' ORDER BY book_date DESC";
             $result = $this->conn->query($query);
             
             $data = array();

@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <link rel="stylesheet" href="./assets/styles.css" />
 
     <title>OBRS</title>
   </head>
@@ -29,7 +29,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
       <?php
-        if(isset($_SESSION["userId"])){
+        if(isset($_SESSION["userId"]) && !empty($_SESSION["userId"])){
             ?>
               <li class="nav-item">
                 <a class="nav-link" href="account.php">My Account</a>

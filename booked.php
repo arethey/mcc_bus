@@ -155,6 +155,7 @@
     const fare = '<?php echo $fare ;?>';
     let totalFare = 0;
     let seats = [];
+    const status = '<?php echo $schedule['status'] ?>'
 
     $( ".btn-seat" ).click(function() {
         const seat_num = $(this).attr("data-seat");
@@ -186,6 +187,11 @@
 
         if(!isVerified){
             alert('Unable to create booking. Please verify your account.')
+            return
+        }
+
+        if(status !== 'waiting'){
+            alert('Oops! Unable to book this schedule.')
             return
         }
 
