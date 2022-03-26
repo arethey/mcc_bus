@@ -76,7 +76,7 @@
                                                             </p>
                                                             <p class="mb-0 d-flex align-items-center justify-content-between">
                                                                 <span class="text-muted">Status:</span>
-                                                                <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                                <span class="font-weight-bold text-uppercase badge badge-info"><?php echo $row['payment_status'] ?></span>
                                                             </p>
                                                             <p class="mb-0 d-flex align-items-center justify-content-between">
                                                                 <span class="text-muted">Schedule Date:</span>
@@ -114,7 +114,7 @@
                             <?php
                                 foreach ($bookings as &$row)
                                 {
-                                    if($row['payment_status'] == 'confirm')
+                                    if($row['payment_status'] == 'confirmed')
                                     {
                                         $route_from = $new_location->getById($row['route_from']);
                                         $route_to = $new_location->getById($row['route_to']);
@@ -145,7 +145,7 @@
                                                             </p>
                                                             <p class="mb-0 d-flex align-items-center justify-content-between">
                                                                 <span class="text-muted">Status:</span>
-                                                                <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                                <span class="font-weight-bold text-uppercase badge badge-success"><?php echo $row['payment_status'] ?></span>
                                                             </p>
                                                             <p class="mb-0 d-flex align-items-center justify-content-between">
                                                                 <span class="text-muted">Schedule Date:</span>
@@ -213,7 +213,7 @@
                                                             </p>
                                                             <p class="mb-0 d-flex align-items-center justify-content-between">
                                                                 <span class="text-muted">Status:</span>
-                                                                <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                                <span class="font-weight-bold text-uppercase badge badge-danger"><?php echo $row['payment_status'] ?></span>
                                                             </p>
                                                             <p class="mb-0 d-flex align-items-center justify-content-between">
                                                                 <span class="text-muted">Schedule Date:</span>
@@ -254,7 +254,7 @@
     {
         var printContents = document.getElementById(divId).innerHTML;
         var originalContents = document.body.innerHTML;
-        document.body.innerHTML = "<html><head><title></title></head><body>" + printContents + "</body>";
+        document.body.innerHTML = "<html><head><title></title></head><body><div style='margin: auto; max-width: 500px'>" + printContents + "</div></body>";
         window.print();
         document.body.innerHTML = originalContents;
     }
@@ -267,10 +267,11 @@
                 cache: false,
                 data: {
                     type: 2,
-                    id
+                    id,
+                    payment_status: 'cancel'
                 },
                 type: "post",
-                url: "controllers/cancel-booking.php",
+                url: "controllers/update-booking.php",
                 success: function(dataResult) {
                     var dataResult = JSON.parse(dataResult);
                     if (dataResult.statusCode == 200) {

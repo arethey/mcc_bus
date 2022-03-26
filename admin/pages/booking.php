@@ -46,7 +46,7 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="border bg-light">
                                         <div id="<?php echo 'print_'.$row['book_id'] ?>">
-                                            <div class="bg-primary p-3">
+                                            <div class="bg-primary text-white p-3">
                                                 <small><?php echo 'Distance: '.$row['distance'] ?></small>
                                                 <h4 class="mb-0">
                                                     <?php echo $route_from["location_name"].' &#x2192; '.$route_to["location_name"] ?>
@@ -68,7 +68,7 @@
                                                 </p>
                                                 <p class="mb-0 d-flex align-items-center justify-content-between">
                                                     <span class="text-muted">Status:</span>
-                                                    <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                    <span class="font-weight-bold text-uppercase badge badge-info"><?php echo $row["payment_status"] ?></span>
                                                 </p>
                                                 <p class="mb-0 d-flex align-items-center justify-content-between">
                                                     <span class="text-muted">Schedule Date:</span>
@@ -90,8 +90,7 @@
                                         </div>
 
                                         <div class="p-3">
-                                            <button class="btn btn-sm btn-danger" onclick="cancelBook('<?php echo $row['book_id'] ?>')">Cancel</button>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="PrintElem('<?php echo 'print_'.$row['book_id'] ?>')">Print</button>
+                                            <button class="btn btn-sm btn-primary" onclick="confirmBook('<?php echo $row['book_id'] ?>')">Confirm</button>
                                         </div>
                                     </div>
                                 </div>
@@ -106,7 +105,7 @@
                 <?php
                     foreach ($bookings as &$row)
                     {
-                        if($row['payment_status'] == 'confirm')
+                        if($row['payment_status'] == 'confirmed')
                         {
                             $route_from = $new_location->getById($row['route_from']);
                             $route_to = $new_location->getById($row['route_to']);
@@ -115,7 +114,7 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="border bg-light">
                                         <div id="<?php echo 'print_'.$row['book_id'] ?>">
-                                            <div class="bg-primary p-3">
+                                            <div class="bg-primary text-white p-3">
                                                 <small><?php echo 'Distance: '.$row['distance'] ?></small>
                                                 <h4 class="mb-0">
                                                     <?php echo $route_from["location_name"].' &#x2192; '.$route_to["location_name"] ?>
@@ -137,7 +136,7 @@
                                                 </p>
                                                 <p class="mb-0 d-flex align-items-center justify-content-between">
                                                     <span class="text-muted">Status:</span>
-                                                    <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                    <span class="font-weight-bold text-uppercase badge badge-success"><?php echo $row['payment_status'] ?></span>
                                                 </p>
                                                 <p class="mb-0 d-flex align-items-center justify-content-between">
                                                     <span class="text-muted">Schedule Date:</span>
@@ -156,10 +155,6 @@
                                                     <span class="font-weight-bold"><?php echo $row['fare'] ?></span>
                                                 </p>
                                             </div>
-                                        </div>
-
-                                        <div class="p-3">
-                                            <button class="btn btn-sm btn-outline-primary" onclick="PrintElem('<?php echo 'print_'.$row['book_id'] ?>')">Print</button>
                                         </div>
                                     </div>
                                 </div>
@@ -183,7 +178,7 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="border bg-light">
                                         <div id="<?php echo 'print_'.$row['book_id'] ?>">
-                                            <div class="bg-primary p-3">
+                                            <div class="bg-primary text-white p-3">
                                                 <small><?php echo 'Distance: '.$row['distance'] ?></small>
                                                 <h4 class="mb-0">
                                                     <?php echo $route_from["location_name"].' &#x2192; '.$route_to["location_name"] ?>
@@ -205,7 +200,7 @@
                                                 </p>
                                                 <p class="mb-0 d-flex align-items-center justify-content-between">
                                                     <span class="text-muted">Status:</span>
-                                                    <span class="font-weight-bold"><?php echo $row['payment_status'] ?></span>
+                                                    <span class="font-weight-bold text-uppercase badge badge-danger"><?php echo $row['payment_status'] ?></span>
                                                 </p>
                                                 <p class="mb-0 d-flex align-items-center justify-content-between">
                                                     <span class="text-muted">Schedule Date:</span>
@@ -235,3 +230,30 @@
         </div>
     </div>
 </div>
+
+<script>
+    function confirmBook(id)
+    {
+        if(confirm("Are you sure to confirm this booking?")){
+            $.ajax({
+                cache: false,
+                data: {
+                    type: 2,
+                    id,
+                    payment_status: 'confirmed'
+                },
+                type: "post",
+                url: "../controllers/update-booking.php",
+                success: function(dataResult) {
+                    var dataResult = JSON.parse(dataResult);
+                    if (dataResult.statusCode == 200) {
+                        alert("Booking confirmed successfully.");
+                        location.reload();
+                    } else {
+                        alert(dataResult.title);
+                    }
+                },
+            });
+        }
+    }
+</script>
