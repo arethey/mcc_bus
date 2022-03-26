@@ -12,10 +12,42 @@
 
     include('controllers/location.php');
     $new_location = new Location($db);
+
+    include('controllers/passenger.php');
+    $new_passenger = new Passenger($db);
+    $passenger = $new_passenger->getById($_SESSION["userId"]);
+
+    if(isset($_POST["update-passenger-submit"])){
+        $first_name = $_POST["first_name"];
+        $last_name = $_POST["last_name"];
+        $email = $_POST["email"];
+        $address = $_POST["address"];
+        $password = $_POST["password"];
+
+        $new_passenger->update($first_name, $last_name, $email, $address, $password, $_SESSION["userId"]);
+    }
 ?>
 
 <main>
     <div class="container mt-5">
+        <?php
+            if(isset($_GET['error']) && !empty($_GET['error'])){
+                if($_GET['error'] == 'stmtfailed'){
+                    echo '<div class="alert alert-danger" role="alert">
+                Oops something went wrong.
+                </div>';
+                }
+            }
+
+            if(isset($_GET['success']) && !empty($_GET['success'])){
+                if($_GET['success'] == 'updatedPassenger'){
+                    echo '<div class="alert alert-success" role="alert">
+                Account updated successfully.
+                </div>';
+                }
+            }
+        ?>
+
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="booking-tab" data-toggle="tab" href="#booking" role="tab" aria-controls="booking" aria-selected="true">My booking</a>
@@ -244,7 +276,34 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade bg-white p-3 border-right border-left border-bottom" id="settings" role="tabpanel" aria-labelledby="settings-tab">setings</div>
+            <div class="tab-pane fade bg-white p-3 border-right border-left border-bottom" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                <form method="POST" action="">
+                    <div class="form-row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo $passenger['first_name'] ?>" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo $passenger['last_name'] ?>" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" name="address" value="<?php echo $passenger['address'] ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $passenger['email'] ?>" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" name="update-passenger-submit">Update</button>
+                </form>
+            </div>
         </div>
     </div>
 </main>

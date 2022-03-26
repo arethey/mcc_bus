@@ -35,6 +35,40 @@
             $this->createPassenger();
         }
 
+        public function update($first_name, $last_name, $email, $address, $password, $id)
+        {   
+            $this->first_name=$first_name;
+            $this->last_name=$last_name;
+            $this->email=$email;
+            $this->address=$address;
+            $this->password=$password;
+
+            if($this->password){
+                $sql = "UPDATE ".$this->table_name." SET first_name=?, last_name=?, email=?, address=?, password=? WHERE id=$id";
+                $hashedPwd = password_hash($this->password, PASSWORD_DEFAULT);
+            }else{
+                $sql = "UPDATE ".$this->table_name." SET first_name=?, last_name=?, email=?, address=? WHERE id=$id";
+            }
+            
+            $stmt = mysqli_stmt_init($this->conn);
+            if(!mysqli_stmt_prepare($stmt, $sql)){
+                header("location: account.php?error=stmtfailed");
+                exit();
+            }
+
+            if($hashedPwd){
+                mysqli_stmt_bind_param($stmt, "sssss", $this->first_name, $this->last_name, $this->email, $this->address, $hashedPwd);
+            }else{
+                mysqli_stmt_bind_param($stmt, "ssss", $this->first_name, $this->last_name, $this->email, $this->address);
+            }
+            
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+
+            header("location: account.php?success=updatedPassenger");
+            exit();
+        }
+
         public function login($email, $password){
             $this->email=$email;
             $this->password=$password;
@@ -129,15 +163,7 @@
             $resultData = mysqli_stmt_get_result($stmt);
         
             if($row = mysqli_fetch_assoc($resultData)){
-                if($row['email_verified_at'] === '0000-00-00 00:00:00'){
-                    header("location: verify.php");
-                    exit();
-                }else{
-                    return $row;
-                }
-            }else{
-                header("location: logout.php");
-                exit();
+                return $row;
             }
         
             mysqli_stmt_close($stmt);
