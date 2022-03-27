@@ -24,7 +24,7 @@
             $this->address=$address;
             $this->password=$password;
 
-            if($this->isEmailExist()){
+            if($this->isEmailExist($this->email)){
                 header("location: register.php?error=emailExist");
                 exit();
             }
@@ -73,7 +73,7 @@
             $this->email=$email;
             $this->password=$password;
 
-            $isExists = $this->isEmailExist();
+            $isExists = $this->isEmailExist($this->email);
         
             if($isExists === false){
                 header("location: login.php?signin=fail");
@@ -103,7 +103,7 @@
             }
         }
 
-        private function isEmailExist(){
+        public function isEmailExist($email){
             $sql = "SELECT * FROM ".$this->table_name." WHERE email = ?";
             $stmt = mysqli_stmt_init($this->conn);
             if(!mysqli_stmt_prepare($stmt, $sql)){
@@ -111,7 +111,7 @@
                 exit();
             }
         
-            mysqli_stmt_bind_param($stmt, "s", $this->email);
+            mysqli_stmt_bind_param($stmt, "s", $email);
             mysqli_stmt_execute($stmt);
         
             $resultData = mysqli_stmt_get_result($stmt);

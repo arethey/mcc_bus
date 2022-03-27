@@ -64,7 +64,7 @@
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" required />
-                        <a href="request-reset-password.php">Forgot password?</a>
+                        <a href="forget-password.php">Forgot password?</a>
                     </div>
                     <button type="submit" class="btn btn-block btn-dark" name="sign-in-submit">Login</button>
 
